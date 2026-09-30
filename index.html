@@ -157,9 +157,11 @@ body.display.idle #gl{cursor:none}
     <div class="srcs" id="srcs"></div>
     <div class="row">
       <button id="addBtn">הוסף תמונות / PDF / וידאו</button>
+      <button id="camBtn">מצלמה</button>
       <button id="screenBtn">לכידת מסך</button>
       <input id="file" type="file" accept="image/*,application/pdf,video/*" multiple hidden>
     </div>
+    <div class="switch" id="camRow" hidden><label for="camSel">מצלמה פעילה</label><select id="camSel"></select></div>
     <p class="hint">דפדוף משנה רק את התצוגה כאן. הקהל רואה את התמונה החדשה רק כשלוחצים "שלח לבמה". לחיצה על תמונה בוחרת אותה, לחיצה כפולה שולחת מיד.</p>
   </section>
 
@@ -513,12 +515,12 @@ $('saveScene').onclick=()=>{ scenes.push({P:{...P},mode:S.modeMix>0?S.modeB:S.mo
 const MAXD = 2048;
 function fitCanvas(el,w,h){ const s=Math.min(1,MAXD/Math.max(w,h)); if(s===1) return el;
   const c=document.createElement('canvas'); c.width=Math.round(w*s); c.height=Math.round(h*s); c.getContext('2d').drawImage(el,0,0,c.width,c.height); return c; }
-const isLiveKind = k => k==='video'||k==='screen';
+const isLiveKind = k => k==='video'||k==='screen'||k==='camera';
 function addSource(name, el, w, h, kind, label){
   const src={id:nextId++, name, el, w, h, kind, label};
   const b=document.createElement('button'); b.title=name;
   const tc=document.createElement('canvas'); tc.width=144; tc.height=96; b.appendChild(tc);
-  const tag = label || (kind==='video'?'וידאו':kind==='screen'?'מסך':'');
+  const tag = label || (kind==='video'?'וידאו':kind==='screen'?'מסך':kind==='camera'?'מצלמה':'');
   if(tag){ const sp=document.createElement('span'); sp.textContent=tag; b.appendChild(sp); }
   src.thumb=tc; src.btn=b; drawThumb(src);
   const idx=sources.length; sources.push(src);
@@ -608,6 +610,49 @@ $('screenBtn').onclick=async()=>{
     const v=document.createElement('video'); setupVideo(v,'לכידת מסך','screen'); v.srcObject=stream;
   }catch(e){ toast('הדפדפן חסם לכידת מסך בחלון הזה. בגרסה שב-Netlify זה עובד (בכרום, במחשב).',4000); }
 };
+// camera
+async function getCamStream(deviceId){
+  const size={width:{ideal:1920},height:{ideal:1080}};
+  return navigator.mediaDevices.getUserMedia({audio:false, video: deviceId ? {...size, deviceId:{exact:deviceId}} : size});
+}
+async function fillCams(current){
+  try{
+    const devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');
+    const sel=$('camSel'); sel.innerHTML='';
+    devs.forEach((d,i)=>sel.add(new Option(d.label||('מצלמה '+(i+1)), d.deviceId)));
+    if(current) sel.value=current;
+    $('camRow').hidden = devs.length<2;
+  }catch(e){}
+}
+async function openCamera(deviceId){
+  if(!navigator.mediaDevices?.getUserMedia) throw new Error('nocam');
+  const stream=await getCamStream(deviceId);
+  const track=stream.getVideoTracks()[0];
+  const existing=sources.find(s=>s.kind==='camera');
+  if(existing){
+    try{ existing.el.srcObject?.getTracks().forEach(t=>t.stop()); }catch(e){}
+    const v=existing.el;
+    v.addEventListener('loadeddata',()=>{ existing.w=v.videoWidth; existing.h=v.videoHeight; v.play().catch(()=>{}); drawThumb(existing); },{once:true});
+    v.srcObject=stream; existing.name='מצלמה · '+(track.label||''); existing.btn.title=existing.name;
+    setCue(sources.indexOf(existing));
+  } else {
+    const v=document.createElement('video'); setupVideo(v,'מצלמה · '+(track.label||''),'camera'); v.srcObject=stream;
+    toast('המצלמה נוספה לתור. לחץ Enter כדי לשלוח אותה לבמה.',3500);
+  }
+  await fillCams(track.getSettings?.().deviceId);
+}
+$('camBtn').onclick=async()=>{
+  try{ await openCamera(); }
+  catch(e){
+    const n=e&&e.name;
+    toast(n==='NotAllowedError' ? 'אין הרשאה למצלמה. אשר גישה למצלמה בסמל המנעול שליד הכתובת ונסה שוב. בתצוגה כאן בצ׳אט המצלמה חסומה; היא עובדת בגרסה שב-GitHub Pages או Netlify.'
+        : n==='NotFoundError' ? 'לא נמצאה מצלמה מחוברת.'
+        : n==='NotReadableError' ? 'המצלמה תפוסה על ידי תוכנה אחרת (זום, OBS וכו׳). סגור אותה ונסה שוב.'
+        : 'לא הצלחתי לפתוח מצלמה בחלון הזה. בגרסה שב-GitHub Pages או Netlify זה עובד.', 6000);
+  }
+};
+$('camSel').onchange=e=>openCamera(e.target.value).catch(()=>toast('לא הצלחתי לעבור למצלמה הזו.'));
+
 let dragDepth=0;
 addEventListener('dragenter',e=>{ if(ROLE==='main' && e.dataTransfer?.types?.includes('Files')){ dragDepth++; $('drop').hidden=false; e.preventDefault(); } });
 addEventListener('dragover',e=>e.preventDefault());
@@ -644,7 +689,7 @@ function onKey(e){
   if(/^Digit[1-8]$/.test(c)){ setMode(+c.slice(5)-1); return; }
   const onRange = tg && tg.type==='range';
   if(c==='KeyP'){ S.peek=true; return; }
-  if(c==='Enter' || c==='NumpadEnter'){ if(tg && tg.tagName==='BUTTON') return; e.preventDefault(); go(); return; }
+  if(c==='Enter' || c==='NumpadEnter'){ e.preventDefault(); if(tg && tg.blur && tg!==document.body) tg.blur(); go(); return; }
   if((c==='ArrowLeft'&&!onRange) || c==='PageDown'){ e.preventDefault(); setCue(S.cue+1); return; }
   if((c==='ArrowRight'&&!onRange) || c==='PageUp'){ e.preventDefault(); setCue(S.cue-1); return; }
   if(c==='KeyA') toggleAuto(); else if(c==='KeyC') toggleFollow(); else if(c==='KeyS') toggleSpot();

@@ -15,7 +15,7 @@
 - **חשיפת הצילום:** רווח חושף את הצילום בהתמוססות, באיריס מהמרכז או בפסיפס מתפרק, במשך זמן שאתה קובע. החזקת P נותנת הצצה רגעית, וזרקור מגלה את הצילום רק סביב הסמן.
 - **צילום מוסווה (V):** התמונה המלאה מופיעה מתחת לשכבה צבעונית ומתנודדת. המפעיל מזהה שזו התמונה הנכונה, והקהל רואה עוד שכבה של האמנות.
 - **"הבא בתור":** דפדוף בין תמונות ודפי PDF בלי לשנות את הבמה. Enter שולח את הדף הנבחר לבמה. שלט מצגות (PageDown / PageUp) עובד.
-- **מקורות:** תמונות, PDF (כל עמוד הופך לתמונה), וידאו ולכידת מסך.
+- **מקורות:** תמונות, PDF (כל עמוד הופך לתמונה), וידאו, מצלמה חיה (כולל בחירה בין כמה מצלמות מחוברות) ולכידת מסך.
 - **סצנות:** שמירה של מצבים ומעבר הדרגתי ביניהם.
 - **החשכה (B)** ומסך מלא (F).
 
@@ -26,7 +26,7 @@
 **שליטה מאייפד (שני מכשירים):** במחשב שמחובר למקרן פותחים את האתר ולוחצים "המכשיר הזה הוא המקרן" (או פותחים ישירות את הכתובת עם `#display` בסופה). על המסך מופיע קוד בן 4 ספרות. באייפד מקלידים את הקוד, ומכאן כל השליטה נעשית מהאייפד.
 
 - שני המכשירים צריכים אינטרנט. החיבור עובר דרך השרת הציבורי של [PeerJS](https://peerjs.com), ולכן כדאי לבדוק אותו במקום ההופעה לפני המופע.
-- דרך החיבור הזה עוברים תמונות ו-PDF. וידאו ולכידת מסך מוצגים רק בחלון מקרן על אותו מחשב.
+- דרך החיבור הזה עוברים תמונות ו-PDF. וידאו, מצלמה ולכידת מסך מוצגים רק בחלון מקרן על אותו מחשב.
 
 ## מקשים
 
@@ -68,6 +68,6 @@ Settings → Pages → Deploy from a branch → `main` / `(root)`.
 
 ## English
 
-**Prizma Stage** is a live video-art tool for projecting photographs as a stage backdrop. It turns an image, a PDF page or a video into a moving kaleidoscope (plus seven other WebGL effects), driven by the mouse or by automatic random motion. The operator can reveal the full photograph at any moment, with a dissolve, iris or mosaic transition. It includes a cue/preview workflow for paging through PDFs, a "veiled" mode that lets the operator recognise the photo while the audience sees art, a projector window for a second screen, and remote control from an iPad through a 4-digit pairing code (PeerJS).
+**Prizma Stage** is a live video-art tool for projecting photographs as a stage backdrop. It turns an image, a PDF page, a video or a live camera feed into a moving kaleidoscope (plus seven other WebGL effects), driven by the mouse or by automatic random motion. The operator can reveal the full photograph at any moment, with a dissolve, iris or mosaic transition. It includes a cue/preview workflow for paging through PDFs, a "veiled" mode that lets the operator recognise the photo while the audience sees art, a projector window for a second screen, and remote control from an iPad through a 4-digit pairing code (PeerJS).
 
 Single HTML file, no build step. Made by Boaz Bareket.
