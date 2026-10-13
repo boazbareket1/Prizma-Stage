@@ -10,7 +10,11 @@
 
 ## מה יש בה
 
-- **8 אפקטים** שעוברים זה לזה בהדרגה: קליידוסקופ, מראות, מנהרה, נוזלי, רסיסים, פסים, פסיפס ומערבולת. אפשר לשלוט במספר המקטעים, בעיוות, בקנה המידה, בזווית, בסיבוב ובצבע.
+- **10 אפקטים** שעוברים זה לזה בהדרגה: קליידוסקופ, מראות, מנהרה, נוזלי, רסיסים, פסים, פסיפס, מערבולת, גלים וחלת דבש. אפשר לשלוט במספר המקטעים, בעיוות, בקנה המידה, בזווית, בסיבוב ובצבע.
+- **וריאציות:** לכל אפקט ארבעה צירופי פרמטרים שמורים (Shift+1–4) ווריאציה אקראית (G). ההחלפה האוטומטית יכולה להחליף אפקטים, וריאציות של אותו אפקט, או את שניהם.
+- **ריצוף (T):** גוזר חתיכה מתוך האפקט ומשכפל אותה כאריחים, בחמש דוגמאות: חזרה, מראה, סיבוב, לבנים ושזירה. אפשר לקבוע את מספר האריחים, את גודל החתיכה ואת קווי הרובה, והחיתוך נודד לבד.
+- **טקסטורות:** גרעין, רשת נקודות, תחריט, אריג, סריקה, זכוכית ושיש, עם עוצמה וגודל.
+- **הקלטה (R):** מקליט את הבמה לקטעי וידאו (MP4 או WebM) ושומר אותם להורדה, ב-1080p, ב-720p או ברזולוציית המסך.
 - **תנועה:** הסמן (או האצבע) קובע איזה חלק מהצילום נכנס לאפקט. יש גם מצב אוטומטי עם שיטוט אקראי וזום שנושם, והחלפת אפקטים לפי זמן.
 - **חשיפת הצילום:** רווח חושף את הצילום בהתמוססות, באיריס מהמרכז או בפסיפס מתפרק, במשך זמן שאתה קובע. החזקת P נותנת הצצה רגעית, וזרקור מגלה את הצילום רק סביב הסמן.
 - **צילום מוסווה (V):** התמונה המלאה מופיעה מתחת לשכבה צבעונית ומתנודדת. המפעיל מזהה שזו התמונה הנכונה, והקהל רואה עוד שכבה של האמנות.
@@ -37,7 +41,10 @@
 | רווח | חשיפה / הסתרה של הצילום |
 | V | צילום מוסווה |
 | P (החזקה) | הצצה רגעית |
-| 1–8 | בחירת אפקט |
+| 1–9 · 0 | בחירת אפקט |
+| Shift+1–4 · G | וריאציה שמורה · וריאציה אקראית |
+| T | ריצוף |
+| R | הקלטה |
 | A · C · S | אוטומטי · מעקב סמן · זרקור |
 | N | הפתעה אקראית |
 | B | החשכה |
@@ -68,6 +75,6 @@ Settings → Pages → Deploy from a branch → `main` / `(root)`.
 
 ## English
 
-**Prizma Stage** is a live video-art tool for projecting photographs as a stage backdrop. It turns an image, a PDF page, a video or a live camera feed into a moving kaleidoscope (plus seven other WebGL effects), driven by the mouse or by automatic random motion. The operator can reveal the full photograph at any moment, with a dissolve, iris or mosaic transition. It includes a cue/preview workflow for paging through PDFs, a "veiled" mode that lets the operator recognise the photo while the audience sees art, a projector window for a second screen, and remote control from an iPad through a 4-digit pairing code (PeerJS).
+**Prizma Stage** is a live video-art tool for projecting photographs as a stage backdrop. It turns an image, a PDF page, a video or a live camera feed into a moving kaleidoscope (plus nine other WebGL effects, tiling and textures), driven by the mouse or by automatic random motion. The operator can reveal the full photograph at any moment, with a dissolve, iris or mosaic transition. It includes a cue/preview workflow for paging through PDFs, a "veiled" mode that lets the operator recognise the photo while the audience sees art, a projector window for a second screen, video recording and export, and remote control from an iPad through a 4-digit pairing code (PeerJS).
 
 Single HTML file, no build step. Made by Boaz Bareket.
